@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Space Scroller</title>
+
+<script src="https://d309knd7es5f10.cloudfront.net/createjs_1.1_min.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/zim_9.3.0.js"></script>
+
+<script>
+
+var scaling = "fit";
+var width = 1920;
+var height = 1080;
+var color = "#08669F";
+var outerColor = "#021E2F";
+var assets = ["background.png", "smoke.png", "planets.png"];
+var path = "assets/scroller/";
+
+var frame = new Frame(scaling, width, height, color, outerColor, assets, path, new Waiter({backgroundColor:blue, corner:[30,30,0,0]}));
+frame.on("ready", function() {
+   zog("ready from ZIM Frame");
+
+   var stage = frame.stage;
+   var stageW = frame.width;
+   var stageH = frame.height;
+
+   // put your code here:
+
+   frame.asset("background.png").addTo();
+
+   var smoke = new Scroller(frame.asset("smoke.png").addTo(), .2);
+   var planets = new Scroller(frame.asset("planets.png").addTo(), .6);
+
+   stage.update();
+
+});
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Space Game</title>
+
+<script src="https://d309knd7es5f10.cloudfront.net/createjs_1.1_min.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/zim_9.3.0.js"></script>
+
+<script>
+var scaling = "fit";
+var width = 1920;
+var height = 1080;
+var color = dark;
+var outerColor = darker;
+var assets = ["background.png", "rocket.png", "planet1.png", "planet2.png", "planet3.png", "planet4.png", "planet5.png", "planet6.png", "planet7.png", "planet8.png", "planet9.png", "planet10.png"];
+var path = "assets/";
+
+var frame = new Frame(scaling, width, height, color, outerColor, assets, path, new Waiter());
+frame.on("ready", function() {
+    var stage = frame.stage;
+    var stageW = frame.width;
+    var stageH = frame.height;
+
+    // BACKGROUND AND PLAYER
+    var background = frame.asset("background.png").addTo(stage);
+    var player = frame.asset("rocket.png").loc(960, 540).sca(0.3);
+    var motionController = new MotionController({
+        target:player,
+        type:"mousemove",
+        speed:30,
+        axis:"both"
+    });
+
+    // PLANETS
+    var space = new Container(stageW, stageH).addTo(stage);
+    var minTimeAcross = 10000;
+    var maxTimeAcross = 20000;
+    var minSpin = 2000;
+    var maxSpin = 10000;
+    var minTimeMake = 500;
+    var maxTimeMake = 3000;
+    var offset = 300;
+
+makeAsteroid();
+function makeAsteroid() {
+
+    // make a container to hold the PNGs
+    var planet = new Container();
+
+    // randomize which planet appears
+    var rand = zim.rand(0, 10);
+    var pic = frame.asset("planet"+rand+".png")
+        .clone()
+        .addTo(planet);
+
+    // centerReg so it spins nicely and add it to space
+    planet.centerReg(space);
+
+    // Below, we position and animate the planet
+    // start randomly off the stage on one side and go to a random spot on the other side
+    // offset is how far off the stage to start
+    // the pos array holds arrangements for all four sides
+    var pos = [
+        [zim.rand(stageW), -offset, zim.rand(stageW), stageH+offset],
+        [zim.rand(stageW), stageH+offset, zim.rand(stageW), -offset],
+        [-offset, zim.rand(stageH), stageW+offset, zim.rand(stageH)],
+        [stageW+offset, zim.rand(stageH), -offset, zim.rand(stageH)]
+    ];
+    var posData = shuffle(pos)[0];
+
+    // animate the planets across the screen
+    planet.animate({
+        set:{x:posData[0], y:posData[1]}, // start position
+        obj:{x:posData[2], y:posData[3]}, // end position
+        time:zim.rand(minTimeAcross, maxTimeAcross),
+        ease:"linear",
+        call:function(planet){ // call gets sent the object the animation is on
+            space.removeChild(planet); // remove the planet when the animation ends
+        }
+    });
+
+    // also rotate the planets
+    // set override to false so it does not remove the last animation
+    // planet.animate({
+    //     obj:{rotation:360},
+    //     time:zim.rand(minSpin, maxSpin),
+    //     ease:"linear",
+    //     loop:true,
+    //     override:false
+    // });
+
+    // call makeAsteroids after a random timeout
+    timeoutID = timeout(zim.rand(minTimeMake, maxTimeMake), makeAsteroid);
+    
+}
+    stage.update();
+
+});
+
+</script>
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>
