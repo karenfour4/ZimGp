@@ -13,7 +13,7 @@ var width = 1920;
 var height = 1080;
 var color = dark;
 var outerColor = darker;
-var assets = ["background.png", "rocket.png", "planet1.png", "planet2.png", "planet3.png", "planet4.png", "planet5.png", "planet6.png", "planet7.png", "planet8.png", "planet9.png", "planet10.png"];
+var assets = ["background.png", "rocketOn.png", "rocketOff.png", "planet1.png", "planet2.png", "planet3.png", "planet4.png", "planet5.png", "planet6.png", "planet7.png", "planet8.png", "planet9.png", "planet10.png"];
 var path = "assets/";
 
 var frame = new Frame(scaling, width, height, color, outerColor, assets, path, new Waiter());
@@ -24,7 +24,7 @@ frame.on("ready", function() {
 
     // BACKGROUND AND PLAYER
     var background = frame.asset("background.png").addTo(stage);
-    var player = frame.asset("rocket.png").loc(960, 540).sca(0.3);
+    var player = frame.asset("rocketOn.png").loc(960, 540).sca(0.3);
     var motionController = new MotionController({
         target:player,
         type:"mousemove",
